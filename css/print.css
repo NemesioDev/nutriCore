@@ -1,0 +1,70 @@
+/* Folha de Impressão e Exportação em PDF do Plano Alimentar NutriCore */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt;
+  }
+
+  .db-navbar,
+  .diet-header-actions,
+  .meal-header-actions,
+  .food-row-actions,
+  .toast-container,
+  .modal-overlay,
+  .icon-btn-danger,
+  .icon-btn-danger-sm,
+  .sub-btn,
+  .auth-container,
+  .phone-mockup-frame,
+  .section-top-bar button {
+    display: none !important;
+  }
+
+  #appScreen {
+    display: block !important;
+  }
+
+  .db-main-content {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .diet-header-card {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    margin-bottom: 15px !important;
+  }
+
+  .meal-card {
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    margin-bottom: 12px !important;
+  }
+
+  .meal-card-header {
+    background: #f8fafc !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+  }
+
+  .food-row {
+    border-bottom: 1px dotted #cbd5e1 !important;
+    padding: 6px 0 !important;
+  }
+
+  .diet-notes-card {
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+  }
+
+  .input-grams {
+    border: none !important;
+    background: transparent !important;
+    font-weight: bold;
+    width: auto !important;
+  }
+}
