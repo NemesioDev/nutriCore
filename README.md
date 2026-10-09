@@ -1,86 +1,69 @@
-# 🍏 NutriCore — Plataforma de Nutrição & Gestão Clínica
+# 🌿 NutriCore — Software de Nutrição Clínica & Alta Performance
 
-> **NutriCore** é um software web moderno para nutricionistas e profissionais de saúde, focado em precisão científica, prescrição rápida de dietas com tabela TACO/IBGE, avaliação antropométrica avançada e aplicativo interativo para pacientes.
+> Plataforma completa inspirada no Dietbox, desenvolvida em **React 19 + TypeScript + Vite** e conectada em **tempo real (Realtime)** com banco de dados relacional **Supabase PostgreSQL**.
 
 ---
 
-## ✨ Principais Funcionalidades
+## 🚀 Principais Funcionalidades
 
-### 🥗 1. Criador de Dietas & Planos Alimentares
-- **Base Nutricional TACO / IBGE**: Cálculo instantâneo de calorias (kcal), carboidratos, proteínas, gorduras e fibras por porção e a cada 100g.
-- **Painel de Macros em Tempo Real**: Distribuição visual do Valor Energético Total (VET) comparado com a meta planejada.
-- **Assistente NutriCore (Substituição Inteligente)**: Sugere alimentos alternativos com cálculo automático de gramatura equivalente em calorias e macronutrientes.
-- **Integração com WhatsApp**: Envio direto do plano estruturado e humanizado para o WhatsApp do paciente com apenas um clique.
-- **Impressão & PDF Profissional**: Exportação de receituário dietético limpo e formatado.
+1. **Gestão de Usuários & Níveis de Acesso (RBAC):**
+   - Papéis disponíveis com permissões diferenciadas: `admin`, `nutricionista`, `recepcionista` e `paciente`.
+   - Gerenciamento e atualização de níveis em tempo real diretamente no Supabase.
 
-### 📊 2. Avaliação Antropométrica & Cálculos Clínicos
-- **IMC (OMS)**: Cálculo e classificação automática do estado nutricional.
-- **Taxa Metabólica Basal (TMB)**: Equação de *Mifflin-St Jeor*.
-- **Gasto Energético Total (GET)**: Ajuste com base no fator de atividade física do paciente.
-- **Composição Corporal**: Estimativa de % de gordura, massa magra (kg), Relação Cintura-Quadril (RCQ) e tabela de histórico evolutivo.
+2. **Prescrição Nutricional com Tabela TACO Oficial:**
+   - Banco com dezenas de alimentos categorizados (Proteínas, Carboidratos, Vegetais, Laticínios, Gorduras Boas).
+   - Cálculo automático de macronutrientes (Calorias, Carboidratos, Proteínas e Gorduras) proporcional às gramas prescritas.
+   - Barra de progresso de metas calóricas em tempo real.
+   - **Substituição Inteligente:** Sugestões de alimentos equivalentes isocalóricos.
+   - Exportação direta para **WhatsApp** e **Impressão/PDF**.
 
-### 📱 3. Simulador do Aplicativo do Paciente (NutriCore Mobile)
-- Moldura de smartphone interativa exibindo exatamente como o paciente visualiza as refeições do dia.
-- **Rastreador de Hidratação**: Registro de copos d'água (+250ml) com barra de progresso em tempo real da meta diária.
-- **Canal Direto**: Prévia de envio de mensagens e orientações com a nutricionista.
+3. **Avaliação Antropométrica & Metabolismo:**
+   - Fórmulas científicas automáticas:
+     - **IMC** com classificação OMS (Baixo peso, Eutrofia, Sobrepeso, Obesidade).
+     - **TMB (Taxa Metabólica Basal)** por *Mifflin-St Jeor*.
+     - **GET (Gasto Energético Total)** ajustado pelo fator de atividade física.
+     - **RCQ (Relação Cintura-Quadril)** e percentual de gordura.
+   - Histórico evolutivo completo gravado no banco relacional.
 
-### 👥 4. Gestão de Pacientes & Prontuários
-- Cadastro completo de anamnese rápida, dados biométricos e histórico.
-- Busca instantânea e filtros por nome ou e-mail.
+4. **Agenda de Consultas & Telemedicina:**
+   - Agendamento de consultas presenciais e remotas.
+   - Link integrado de teleconsulta e controle de status (`Agendado`, `Confirmado`, `Realizado`, `Cancelado`).
 
-### 📅 5. Agenda de Consultas & Telemedicina
-- Gestão de atendimentos presenciais e teleconsultas com link de videoconferência.
+5. **Lista de Compras Automática & Acervo de Receitas:**
+   - Geração automática da lista de compras semanal agregando todos os itens prescritos no plano alimentar do paciente.
+   - Cópia com 1 clique para a área de transferência.
 
-### 🛒 6. Lista de Compras Inteligente & Receitas Fit
-- Geração automática da lista de compras semanal calculada a partir dos itens do plano alimentar ativo.
-- Biblioteca de receitas saudáveis com passo a passo e divisão de macros.
+6. **Aplicativo do Paciente (Simulador Mobile):**
+   - Bezel interativo de smartphone.
+   - Registro de hidratação (+250ml) salvando no Supabase em tempo real.
+   - Visualização das refeições prescritas.
+   - Chat bidirecional em tempo real entre nutricionista e paciente.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Frontend Core**: HTML5 Semântico, Vanilla JavaScript (ES6+ modular).
-- **Estilização**: Vanilla CSS com Design System baseado em CSS Variables (tokens de cor, elevação e tipografia).
-- **Ícones & Tipografia**: Font Awesome 6 e Google Fonts (Inter).
-- **Sem Dependências Pesadas**: Carregamento instantâneo, compatível com qualquer navegador moderno sem necessidade de build step.
+- **Frontend:** React 19, TypeScript, Vite, Lucide React
+- **Estilização:** CSS Moderno com Design System (Greenbox/NutriCore Palette)
+- **Backend / Database:** Supabase PostgreSQL (10 tabelas relacionais com RLS e canais de Realtime ativos)
+- **Biblioteca Nutricional:** Tabela TACO (Tabela Brasileira de Composição de Alimentos)
 
 ---
 
-## 🚀 Como Executar Localmente
+## 📦 Como Executar Localmente
 
-### Opção 1: Abrir diretamente no navegador
-Basta dar um duplo clique no arquivo `index.html`.
-
-### Opção 2: Servidor local simples (Python)
 ```bash
-# Na pasta do projeto:
-python -m http.server 8080
-```
-Acesse em seu navegador: [http://localhost:8080/index.html](http://localhost:8080/index.html)
+# 1. Clonar o repositório
+git clone https://github.com/NemesioDev/nutriCore.git
 
----
+# 2. Entrar na pasta do projeto
+cd nutricore
 
-## 📂 Estrutura do Projeto
+# 3. Instalar dependências
+npm install
 
-```text
-nutricore/
-├── index.html             # Interface principal e roteamento de abas
-├── README.md              # Documentação oficial do projeto
-├── .gitignore             # Arquivos ignorados pelo controle de versão
-├── css/
-│   ├── variables.css      # Design tokens e paleta NutriCore
-│   ├── auth.css           # Tela de autenticação e login
-│   ├── app.css            # Estilos da plataforma, cards, modais e simulador
-│   └── print.css          # Estilização para impressão e PDF
-└── js/
-    ├── food-database.js   # Tabela TACO / IBGE com alimentos e macros
-    ├── mock-data.js       # Dados iniciais de pacientes, dietas e consultas
-    ├── diet-builder.js    # Lógica do prescritor de dietas e assistente
-    ├── anthropometry.js   # Fórmulas de IMC, TMB, GET e antropometria
-    └── app.js             # Orquestração do sistema e simulador
+# 4. Executar em modo desenvolvimento
+npm run dev
 ```
 
----
-
-## 📄 Licença
-Distribuído sob a licença MIT.
+Acesse em seu navegador: `http://localhost:5173/`
