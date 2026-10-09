@@ -439,10 +439,30 @@ body {
   border-radius: var(--radius-full);
 }
 
+.user-avatar-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
 .header-user-meta {
   display: flex;
   flex-direction: column;
   line-height: 1.2;
+}
+
+.header-user-meta .user-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--cold-neutral-900);
+}
+
+.header-user-meta .user-crn {
+  font-size: 0.675rem;
+  color: var(--greenbox-700);
+  font-weight: 600;
 }
 
 .header-logout-btn {

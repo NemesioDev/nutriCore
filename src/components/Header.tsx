@@ -73,6 +73,10 @@ export const Header: React.FC<HeaderProps> = ({
             src={currentUser?.avatar_url || "https://images.unsplash.com/photo-1594824813589-3221b659c256?auto=format&fit=crop&w=200&q=80"}
             alt={currentUser?.name || "Usuário"}
             className="user-avatar-sm"
+            style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1594824813589-3221b659c256?auto=format&fit=crop&w=200&q=80";
+            }}
           />
           <div className="header-user-meta">
             <span className="user-name">{currentUser?.name?.split(' ')[0] || "Nutricionista"}</span>
