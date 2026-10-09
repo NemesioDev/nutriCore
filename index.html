@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NutriCore | Software de Nutrição Científica & Alta Performance</title>
-  <meta name="description" content="NutriCore: software clínico e esportivo para nutricionistas com prescrição de dietas, cálculo nutricional TACO, avaliação antropométrica e aplicativo do paciente.">
+  <meta name="description" content="NutriCore: software clínico e esportivo para nutricionistas com prescrição de dietas, cálculo nutricional TACO, avaliação antropométrica e aplicativo do paciente integrado ao Supabase em tempo real.">
   
   <!-- Favicon NutriCore SVG -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cdefs%3E%3ClinearGradient id='ncGrad' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2300D285'/%3E%3Cstop offset='100%25' stop-color='%23059669'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath fill='url(%23ncGrad)' d='m86.55,181.66v-67.23c0-4.42,2.36-8.5,6.18-10.71l58.23-33.62c3.33-1.92,7.34-2.17,10.85-.74-.44-.34-.91-.66-1.4-.94l-58.23-33.62c-3.83-2.21-8.54-2.21-12.36,0l-58.23,33.62c-3.83,2.21-6.18,6.29-6.18,10.71v67.23c0,4.42,2.36,8.5,6.18,10.71l58.23,33.62c.49.28,1,.53,1.52.74-2.99-2.32-4.78-5.91-4.78-9.76Z'/%3E%3Ccircle cx='130' cy='32' r='24' fill='%2300D285'/%3E%3C/svg%3E">
@@ -16,6 +16,9 @@
 
   <!-- Font Awesome 6 Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Supabase JS SDK v2 (Oficial) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <!-- Estilos da Aplicação -->
   <link rel="stylesheet" href="css/variables.css">
@@ -49,37 +52,37 @@
 
       <div class="auth-banner-content">
         <div class="auth-banner-badge">
-          <i class="fa-solid fa-atom"></i> Precisão Científica & Alta Performance
+          <i class="fa-solid fa-bolt"></i> Banco de Dados Supabase em Tempo Real
         </div>
         <h2 class="auth-banner-title">
-          Tudo o que você precisa para <b>prescrever dietas</b> e gerir seu consultório.
+          Tudo o que você precisa para <b>prescrever dietas</b> e gerir usuários e níveis.
         </h2>
         <p class="auth-banner-description">
-          Elabore planos alimentares precisos com a Tabela TACO, cálculo em tempo real de macronutrientes, substituição inteligente e aplicativo exclusivo para seus pacientes.
+          Elabore planos alimentares precisos com a Tabela TACO, cálculo em tempo real de macronutrientes, gestão de permissões e dados persistidos no PostgreSQL.
         </p>
 
         <div class="auth-features-pills">
           <div class="auth-feature-item">
-            <i class="fa-solid fa-calculator"></i>
-            <span>Cálculo Automático TACO</span>
+            <i class="fa-solid fa-database"></i>
+            <span>Supabase Realtime</span>
+          </div>
+          <div class="auth-feature-item">
+            <i class="fa-solid fa-users-gear"></i>
+            <span>Gestão de Níveis de Acesso</span>
           </div>
           <div class="auth-feature-item">
             <i class="fa-brands fa-whatsapp"></i>
-            <span>Envio Direto no WhatsApp</span>
+            <span>Envio no WhatsApp</span>
           </div>
           <div class="auth-feature-item">
             <i class="fa-solid fa-mobile-screen-button"></i>
-            <span>App do Paciente no Bolso</span>
-          </div>
-          <div class="auth-feature-item">
-            <i class="fa-solid fa-chart-pie"></i>
-            <span>Avaliação Antropométrica</span>
+            <span>App do Paciente ao Vivo</span>
           </div>
         </div>
       </div>
 
       <div class="auth-banner-footer">
-        © 2026 NutriCore Tecnologia em Nutrição e Saúde Ltda. Todos os direitos reservados.
+        © 2026 NutriCore Tecnologia em Nutrição e Saúde Ltda. PostgreSQL Powered.
       </div>
     </div>
 
@@ -94,7 +97,7 @@
 
         <div class="auth-title-box">
           <h1>Para acessar o <b>NutriCore</b>,<br>realize o login abaixo</h1>
-          <p id="authRoleDesc">Acesso exclusivo para profissionais de nutrição.</p>
+          <p id="authRoleDesc">Acesso com sincronização direta ao Supabase.</p>
         </div>
 
         <!-- Social Logins -->
@@ -111,7 +114,7 @@
         </div>
 
         <div class="auth-divider">
-          <span>ou entre com seu e-mail</span>
+          <span>ou entre com seu e-mail cadastrado</span>
         </div>
 
         <!-- Form Local -->
@@ -150,14 +153,14 @@
 
         <!-- Atalho Rápido para Demonstração -->
         <div class="auth-demo-shortcut">
-          <p><i class="fa-solid fa-bolt text-emerald"></i> Acesso rápido pré-configurado:</p>
-          <button class="auth-demo-btn" onclick="App.login('camila.nutri@nutricore.com.br', '123', 'Nutricionista')">
+          <p><i class="fa-solid fa-database text-emerald"></i> Conexão Realtime ao Banco de Dados:</p>
+          <button class="auth-demo-btn" onclick="App.login('camila.nutri@nutricore.com.br', '123', 'nutricionista')">
             Entrar como Dra. Camila (CRN-3 48.291)
           </button>
         </div>
 
         <div class="auth-register-footer">
-          Não tem cadastro no NutriCore? <a href="javascript:void(0)" onclick="window.openModal('newPatientModal')">Crie uma conta aqui</a>
+          Novo usuário na clínica? <a href="javascript:void(0)" onclick="App.switchView('view-users'); App.openNewUserModal();">Cadastrar novo usuário e nível</a>
         </div>
       </div>
     </div>
@@ -211,6 +214,12 @@
             </a>
           </li>
           <li>
+            <a class="nav-link" data-view="view-users">
+              <i class="fa-solid fa-users-gear text-emerald"></i>
+              <span>Usuários & Níveis</span>
+            </a>
+          </li>
+          <li>
             <a class="nav-link" data-view="view-recipes">
               <i class="fa-solid fa-book-bookmark"></i>
               <span>Receitas & Compras</span>
@@ -224,8 +233,11 @@
           </li>
         </ul>
 
-        <!-- Perfil e Logout -->
+        <!-- Perfil, Indicador Realtime e Logout -->
         <div class="db-nav-user-actions">
+          <div id="dbRealtimeStatus" class="realtime-badge online" title="Status da Conexão com o Supabase">
+            <span class="pulse-dot online"></span> Supabase Realtime Ativo
+          </div>
           <div class="user-profile-pill">
             <img src="https://images.unsplash.com/photo-1594824813589-3221b659c256?auto=format&fit=crop&w=200&q=80" alt="Dra. Camila" class="user-avatar-sm">
             <div class="user-meta-info">
@@ -250,33 +262,45 @@
         <div class="dash-welcome-banner">
           <div class="dash-welcome-text">
             <h1>Olá, Dra. Camila Monteiro! 🌿</h1>
-            <p>Seja bem-vinda ao seu consultório digital NutriCore. Você tem 3 atendimentos hoje.</p>
+            <p>Seja bem-vinda ao seu consultório digital NutriCore. Banco de dados Supabase sincronizado em tempo real.</p>
           </div>
-          <button class="db-btn db-btn--primary" onclick="App.openNewPatientModal()" style="background: var(--white); color: var(--greenbox-900); font-weight: 800;">
-            <i class="fa-solid fa-user-plus"></i> Novo Paciente
-          </button>
+          <div style="display: flex; gap: 10px;">
+            <button class="db-btn db-btn--primary" onclick="App.openNewPatientModal()" style="background: var(--white); color: var(--greenbox-900); font-weight: 800;">
+              <i class="fa-solid fa-user-plus"></i> Novo Paciente
+            </button>
+            <button class="db-btn db-btn--outline" onclick="App.openNewUserModal()" style="background: rgba(255,255,255,0.15); color: var(--white); border-color: rgba(255,255,255,0.3);">
+              <i class="fa-solid fa-user-shield"></i> Novo Usuário/Nível
+            </button>
+          </div>
         </div>
 
         <div class="dash-stats-row">
           <div class="stat-card">
             <div class="stat-icon green"><i class="fa-solid fa-users"></i></div>
             <div class="stat-info">
-              <div class="stat-number" id="statTotalPatients">3</div>
-              <div class="stat-label">Pacientes Ativos</div>
+              <div class="stat-number" id="statTotalPatients">0</div>
+              <div class="stat-label">Pacientes Ativos (BD)</div>
             </div>
           </div>
           <div class="stat-card">
             <div class="stat-icon blue"><i class="fa-solid fa-bowl-food"></i></div>
             <div class="stat-info">
-              <div class="stat-number" id="statTotalDiets">2</div>
-              <div class="stat-label">Planos Prescritos</div>
+              <div class="stat-number" id="statTotalDiets">0</div>
+              <div class="stat-label">Planos Prescritos (BD)</div>
             </div>
           </div>
           <div class="stat-card">
             <div class="stat-icon purple"><i class="fa-solid fa-video"></i></div>
             <div class="stat-info">
-              <div class="stat-number" id="statAppointments">3</div>
-              <div class="stat-label">Consultas Agendadas</div>
+              <div class="stat-number" id="statAppointments">0</div>
+              <div class="stat-label">Consultas Agendadas (BD)</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: #fef3c7; color: #b45309;"><i class="fa-solid fa-users-gear"></i></div>
+            <div class="stat-info">
+              <div class="stat-number" id="statTotalUsers">0</div>
+              <div class="stat-label">Usuários da Clínica (BD)</div>
             </div>
           </div>
         </div>
@@ -285,7 +309,7 @@
           <!-- Consultas do Dia -->
           <div class="dash-card">
             <div class="dash-card-header">
-              <h3><i class="fa-regular fa-calendar-check text-emerald"></i> Atendimentos de Hoje</h3>
+              <h3><i class="fa-regular fa-calendar-check text-emerald"></i> Atendimentos Agendados no Supabase</h3>
               <button class="db-btn db-btn--outline db-btn--sm" onclick="App.openNewAppointmentModal()">Agendar</button>
             </div>
             <div id="dashNextAppointments"></div>
@@ -294,7 +318,7 @@
           <!-- Pacientes Recentes -->
           <div class="dash-card">
             <div class="dash-card-header">
-              <h3><i class="fa-solid fa-clock-rotate-left text-blue"></i> Pacientes Recentes</h3>
+              <h3><i class="fa-solid fa-clock-rotate-left text-blue"></i> Pacientes Recentes no Supabase</h3>
               <button class="db-btn db-btn--outline db-btn--sm" onclick="App.switchView('view-patients')">Ver Todos</button>
             </div>
             <div id="dashRecentPatients"></div>
@@ -306,13 +330,12 @@
       <!-- ABA 2: CRIADOR DE DIETAS & PLANOS ALIMENTARES -->
       <!-- ============================================== -->
       <section id="view-diet-builder" class="view-section active">
-        <!-- Barra de Seleção de Dieta/Paciente -->
         <div class="section-top-bar" style="margin-bottom: 1.25rem;">
           <div class="anthro-patient-selector">
-            <label>Plano Ativo:</label>
-            <select class="db-input-field select-inline" onchange="DietManager.setDiet(this.value)">
-              <option value="dieta_rodrigo">Rodrigo Silveira - Hipertrofia & Definição (2.450 kcal)</option>
-              <option value="dieta_mariana">Mariana Costa - Reeducação & Déficit (1.650 kcal)</option>
+            <label>Plano Ativo no Banco:</label>
+            <select class="db-input-field select-inline" id="dietSelectDropdown" onchange="DietManager.setDiet(this.value)">
+              <option value="44444444-4444-4444-4444-444444444444">Rodrigo Silveira - Hipertrofia & Definição (2.450 kcal)</option>
+              <option value="55555555-5555-5555-5555-555555555555">Mariana Costa - Reeducação & Déficit (1.650 kcal)</option>
             </select>
           </div>
           <div style="display: flex; gap: 8px;">
@@ -325,7 +348,7 @@
           </div>
         </div>
 
-        <!-- Conteúdo do Criador de Dietas (Renderizado via JS) -->
+        <!-- Conteúdo do Criador de Dietas (Conectado ao Supabase) -->
         <div id="dietBuilderContent"></div>
       </section>
 
@@ -335,8 +358,8 @@
       <section id="view-patients" class="view-section">
         <div class="section-top-bar">
           <div>
-            <h2>Meus Pacientes</h2>
-            <p class="text-muted">Gerencie prontuários, planos alimentares e histórico de consultas.</p>
+            <h2>Meus Pacientes (Banco de Dados Supabase)</h2>
+            <p class="text-muted">Pacientes persistidos em tempo real no PostgreSQL.</p>
           </div>
           <div style="display: flex; gap: 10px; align-items: center;">
             <div class="search-input-wrapper">
@@ -344,7 +367,7 @@
               <input type="text" id="patientSearchInput" class="db-input-field" placeholder="Buscar por nome ou e-mail...">
             </div>
             <button class="db-btn db-btn--primary" onclick="App.openNewPatientModal()">
-              <i class="fa-solid fa-user-plus"></i> Cadastrar Paciente
+              <i class="fa-solid fa-user-plus"></i> Cadastrar Paciente no Banco
             </button>
           </div>
         </div>
@@ -358,8 +381,8 @@
       <section id="view-anthro" class="view-section">
         <div class="section-top-bar">
           <div>
-            <h2>Avaliação Antropométrica & Cálculos Clínicos</h2>
-            <p class="text-muted">IMC (OMS), Taxa Metabólica Basal (Mifflin-St Jeor), GET e Composição Corporal.</p>
+            <h2>Avaliação Antropométrica & Cálculos Clínicos (Supabase)</h2>
+            <p class="text-muted">IMC (OMS), Taxa Metabólica Basal (Mifflin-St Jeor), GET e histórico físico gravado no banco.</p>
           </div>
         </div>
 
@@ -373,7 +396,7 @@
         <div class="section-top-bar">
           <div>
             <h2>Agenda de Consultas & Telemedicina</h2>
-            <p class="text-muted">Consultas presenciais e videoconferências integradas do NutriCore.</p>
+            <p class="text-muted">Consultas com atualização de status em tempo real no Supabase.</p>
           </div>
           <button class="db-btn db-btn--primary" onclick="App.openNewAppointmentModal()">
             <i class="fa-solid fa-calendar-plus"></i> Nova Consulta
@@ -384,33 +407,71 @@
       </section>
 
       <!-- ============================================== -->
-      <!-- ABA 6: RECEITAS & LISTA DE COMPRAS -->
+      <!-- ABA 6: USUÁRIOS & NÍVEIS DE ACESSO -->
+      <!-- ============================================== -->
+      <section id="view-users" class="view-section">
+        <div class="section-top-bar">
+          <div>
+            <h2><i class="fa-solid fa-users-gear text-emerald"></i> Gestão de Usuários & Níveis de Acesso</h2>
+            <p class="text-muted">Gerencie permissões (Admin, Nutricionista, Recepcionista, Paciente) gravadas no banco de dados.</p>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center;">
+            <div class="search-input-wrapper">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="userSearchInput" class="db-input-field" placeholder="Buscar por nome, email ou cargo...">
+            </div>
+            <button class="db-btn db-btn--primary" onclick="App.openNewUserModal()">
+              <i class="fa-solid fa-user-shield"></i> Cadastrar Usuário & Nível
+            </button>
+          </div>
+        </div>
+
+        <div class="dash-card" style="padding: 0; overflow: hidden;">
+          <div class="table-responsive">
+            <table class="db-table">
+              <thead>
+                <tr>
+                  <th>Usuário</th>
+                  <th>E-mail</th>
+                  <th>Nível de Acesso (Cargo)</th>
+                  <th>Documento / Contato</th>
+                  <th>Cadastrado em</th>
+                  <th>Ações no Banco</th>
+                </tr>
+              </thead>
+              <tbody id="usersListTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- ABA 7: RECEITAS & LISTA DE COMPRAS -->
       <!-- ============================================== -->
       <section id="view-recipes" class="view-section">
         <div class="section-top-bar">
           <div>
             <h2>Banco de Receitas Fit & Lista de Compras Inteligente</h2>
-            <p class="text-muted">Receitas testadas com cálculo de macronutrientes e lista de compras gerada a partir da dieta ativa.</p>
+            <p class="text-muted">Receitas testadas persistidas no banco e lista semanal calculada a partir do plano ativo.</p>
           </div>
         </div>
 
-        <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-fire-burner text-emerald"></i> Receitas Saudáveis Prontas</h3>
+        <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-fire-burner text-emerald"></i> Receitas Saudáveis no Supabase</h3>
         <div id="recipesGrid" class="recipes-grid"></div>
 
         <div id="shoppingListContent" class="shopping-list-card"></div>
       </section>
 
       <!-- ============================================== -->
-      <!-- ABA 7: SIMULADOR DO APP DO PACIENTE (NUTRICORE) -->
+      <!-- ABA 8: SIMULADOR DO APP DO PACIENTE (TEMPO REAL) -->
       <!-- ============================================== -->
       <section id="view-patient-app" class="view-section">
         <div class="section-top-bar" style="text-align: center; justify-content: center; flex-direction: column;">
           <h2><i class="fa-solid fa-mobile-screen text-emerald"></i> Simulador do Aplicativo NutriCore para Paciente</h2>
-          <p class="text-muted">Veja exatamente como seu paciente visualiza o plano alimentar, registra copos de água e conversa com você pelo app.</p>
+          <p class="text-muted">Ações em tempo real: adicione água ou envie mensagens e veja serem gravadas imediatamente no Supabase!</p>
         </div>
 
         <div class="simulator-layout">
-          <!-- Moldura do Smartphone -->
           <div class="phone-mockup-frame">
             <div class="phone-notch"></div>
             <div class="phone-screen" id="phoneScreenContent"></div>
@@ -473,19 +534,19 @@
   <div id="newPatientModal" class="modal-overlay">
     <div class="modal-dialog">
       <div class="modal-header">
-        <h3><i class="fa-solid fa-user-plus text-emerald"></i> Cadastrar Novo Paciente</h3>
+        <h3><i class="fa-solid fa-user-plus text-emerald"></i> Cadastrar Paciente no Supabase</h3>
         <button class="modal-close-btn" onclick="closeModal('newPatientModal')"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form onsubmit="App.saveNewPatient(event)">
         <div class="modal-body">
           <div class="form-group">
             <label>Nome Completo do Paciente *</label>
-            <input type="text" name="patientName" class="db-input-field" placeholder="Ex: Lucas Gabriel Silveira" required>
+            <input type="text" name="patientName" class="db-input-field" placeholder="Ex: Fernanda Lima Santos" required>
           </div>
           <div class="form-grid-2">
             <div class="form-group">
               <label>E-mail *</label>
-              <input type="email" name="patientEmail" class="db-input-field" placeholder="lucas@exemplo.com" required>
+              <input type="email" name="patientEmail" class="db-input-field" placeholder="fernanda@exemplo.com" required>
             </div>
             <div class="form-group">
               <label>WhatsApp / Telefone *</label>
@@ -508,16 +569,16 @@
           <div class="form-grid-2">
             <div class="form-group">
               <label>Peso Atual (kg)</label>
-              <input type="number" step="0.1" name="patientWeight" class="db-input-field" value="75.0" required>
+              <input type="number" step="0.1" name="patientWeight" class="db-input-field" value="70.0" required>
             </div>
             <div class="form-group">
               <label>Altura (cm)</label>
-              <input type="number" name="patientHeight" class="db-input-field" value="175" required>
+              <input type="number" name="patientHeight" class="db-input-field" value="168" required>
             </div>
           </div>
           <div class="form-group">
             <label>Objetivo Principal</label>
-            <input type="text" name="patientObjective" class="db-input-field" placeholder="Ex: Hipertrofia, Emagrecimento, Reeducação" value="Emagrecimento Saudável">
+            <input type="text" name="patientObjective" class="db-input-field" placeholder="Ex: Hipertrofia, Emagrecimento, Reeducação" value="Emagrecimento & Saúde">
           </div>
           <div class="form-group">
             <label>Nível de Atividade Física</label>
@@ -532,7 +593,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="db-btn db-btn--outline" onclick="closeModal('newPatientModal')">Cancelar</button>
-          <button type="submit" class="db-btn db-btn--primary">Salvar Paciente</button>
+          <button type="submit" class="db-btn db-btn--primary">Salvar no Banco de Dados</button>
         </div>
       </form>
     </div>
@@ -542,7 +603,7 @@
   <div id="addMeasurementModal" class="modal-overlay">
     <div class="modal-dialog">
       <div class="modal-header">
-        <h3><i class="fa-solid fa-weight-scale text-emerald"></i> Registrar Medição Física</h3>
+        <h3><i class="fa-solid fa-weight-scale text-emerald"></i> Registrar Medição Física no Supabase</h3>
         <button class="modal-close-btn" onclick="closeModal('addMeasurementModal')"><i class="fa-solid fa-xmark"></i></button>
       </div>
       <form onsubmit="handleNewMeasurementSubmit(event)">
@@ -574,7 +635,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="db-btn db-btn--outline" onclick="closeModal('addMeasurementModal')">Cancelar</button>
-          <button type="submit" class="db-btn db-btn--primary">Salvar Avaliação</button>
+          <button type="submit" class="db-btn db-btn--primary">Gravar no Banco</button>
         </div>
       </form>
     </div>
@@ -617,15 +678,72 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="db-btn db-btn--outline" onclick="closeModal('newAppModal')">Cancelar</button>
-          <button type="submit" class="db-btn db-btn--primary">Confirmar Agendamento</button>
+          <button type="submit" class="db-btn db-btn--primary">Confirmar no Banco</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal 6: Cadastrar Usuário e Nível de Acesso -->
+  <div id="newUserModal" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-user-shield text-emerald"></i> Cadastrar Novo Usuário & Nível de Acesso</h3>
+        <button class="modal-close-btn" onclick="closeModal('newUserModal')"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <form onsubmit="App.saveNewUser(event)">
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Nome Completo *</label>
+            <input type="text" name="userName" class="db-input-field" placeholder="Ex: Dr. Marcelo Ribeiro" required>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>E-mail de Acesso *</label>
+              <input type="email" name="userEmail" class="db-input-field" placeholder="marcelo@nutricore.com.br" required>
+            </div>
+            <div class="form-group">
+              <label>Nível de Acesso (Cargo) *</label>
+              <select name="userRole" class="db-input-field" required>
+                <option value="nutricionista">Nutricionista (Prescrição e Pacientes)</option>
+                <option value="admin">Administrador (Acesso Total)</option>
+                <option value="recepcionista">Recepcionista (Agendamento e Triagem)</option>
+                <option value="paciente">Paciente (Visualização de Dieta)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Cargo / Especialidade</label>
+              <input type="text" name="userTitle" class="db-input-field" placeholder="Ex: Nutricionista Esportivo">
+            </div>
+            <div class="form-group">
+              <label>Registro Profissional (CRN se aplicável)</label>
+              <input type="text" name="userCrn" class="db-input-field" placeholder="Ex: CRN-3 55.432">
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Telefone / WhatsApp</label>
+              <input type="tel" name="userPhone" class="db-input-field" placeholder="(11) 98888-7777">
+            </div>
+            <div class="form-group">
+              <label>Clínica / Unidade</label>
+              <input type="text" name="userClinic" class="db-input-field" value="Clínica Vida & Nutrição">
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="db-btn db-btn--outline" onclick="closeModal('newUserModal')">Cancelar</button>
+          <button type="submit" class="db-btn db-btn--primary">Cadastrar Usuário no Banco</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- Scripts do Aplicativo -->
+  <script src="js/supabase-client.js"></script>
   <script src="js/food-database.js"></script>
-  <script src="js/mock-data.js"></script>
   <script src="js/diet-builder.js"></script>
   <script src="js/anthropometry.js"></script>
   <script src="js/app.js"></script>
@@ -644,14 +762,14 @@
       e.preventDefault();
       const email = document.getElementById('authEmail').value;
       const pass = document.getElementById('authPassword').value;
-      const role = document.getElementById('tabNutri').classList.contains('active') ? 'Nutricionista' : 'Paciente';
+      const role = document.getElementById('tabNutri').classList.contains('active') ? 'nutricionista' : 'paciente';
       App.login(email, pass, role);
     }
 
     function quickLogin(provider) {
       window.showToast(`Autenticando via ${provider.toUpperCase()}...`, 'info');
       setTimeout(() => {
-        App.login('usuario.' + provider + '@nutricore.com.br', '123', 'Nutricionista');
+        App.login('usuario.' + provider + '@nutricore.com.br', '123', 'nutricionista');
       }, 500);
     }
 

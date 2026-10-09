@@ -1,9 +1,27 @@
-// Módulo de Avaliação Antropométrica e Cálculos Clínicos (NutriCore)
+// Módulo de Avaliação Antropométrica e Cálculos Clínicos (NutriCore - Supabase Realtime)
 window.AnthroManager = {
-  currentPatientId: "paciente_1",
+  currentPatientId: null,
+  currentPatient: null,
+  measurementsList: [],
 
-  init(patientId) {
+  async init(patientId) {
     if (patientId) this.currentPatientId = patientId;
+    await this.loadPatientMeasurements(this.currentPatientId);
+  },
+
+  async loadPatientMeasurements(patientId) {
+    try {
+      if (window.DBService && window.DBService.client) {
+        const patients = await window.DBService.getPatients();
+        if (patients.length > 0) {
+          this.currentPatient = (patientId ? patients.find(p => p.id === patientId) : null) || patients[0];
+          this.currentPatientId = this.currentPatient.id;
+          this.measurementsList = await window.DBService.getMeasurements(this.currentPatientId);
+        }
+      }
+    } catch (err) {
+      console.warn("Erro ao carregar medições do Supabase:", err);
+    }
     this.render();
   },
 
@@ -78,21 +96,22 @@ window.AnthroManager = {
     const container = document.getElementById("anthroContent");
     if (!container) return;
 
-    const patient = window.APP_DATA.patients.find(p => p.id === this.currentPatientId) || window.APP_DATA.patients[0];
-    if (!patient) return;
-
+    const patient = this.currentPatient || { name: "Paciente", weight: 70, height: 170, age: 30, gender: "M", activity_level: "moderado" };
     const imcData = this.calculateIMC(patient.weight, patient.height);
     const tmb = this.calculateTMB(patient.gender, patient.weight, patient.height, patient.age);
-    const getCal = this.calculateGET(tmb, patient.activityLevel);
+    const getCal = this.calculateGET(tmb, patient.activity_level || patient.activityLevel);
 
-    const latestMeasure = patient.measurements && patient.measurements.length > 0 
-      ? patient.measurements[patient.measurements.length - 1] 
-      : { waist: 80, hip: 100, bodyFat: 20 };
+    const latestMeasure = this.measurementsList && this.measurementsList.length > 0 
+      ? this.measurementsList[this.measurementsList.length - 1] 
+      : { waist: 80, hip: 100, body_fat: 20 };
 
+    const bodyFat = latestMeasure.body_fat || latestMeasure.bodyFat || 20;
     const rcqData = this.calculateRCQ(latestMeasure.waist, latestMeasure.hip, patient.gender);
 
-    const fatMassKg = latestMeasure.bodyFat ? +((patient.weight * latestMeasure.bodyFat) / 100).toFixed(1) : 0;
+    const fatMassKg = bodyFat ? +((patient.weight * bodyFat) / 100).toFixed(1) : 0;
     const leanMassKg = +(patient.weight - fatMassKg).toFixed(1);
+
+    const allPatients = (window.App && window.App.patientsList) ? window.App.patientsList : [];
 
     let html = `
       <!-- Seletor de Paciente e Ações -->
@@ -100,7 +119,7 @@ window.AnthroManager = {
         <div class="anthro-patient-selector">
           <label>Paciente Selecionado:</label>
           <select class="db-input-field select-inline" onchange="AnthroManager.init(this.value)">
-            ${window.APP_DATA.patients.map(p => `
+            ${allPatients.map(p => `
               <option value="${p.id}" ${p.id === patient.id ? 'selected' : ''}>
                 ${p.name} (${p.weight}kg • ${p.age} anos)
               </option>
@@ -108,7 +127,7 @@ window.AnthroManager = {
           </select>
         </div>
         <button class="db-btn db-btn--primary" onclick="AnthroManager.openAddMeasurementModal()">
-          <i class="fa-solid fa-plus"></i> Registrar Nova Medição
+          <i class="fa-solid fa-plus"></i> Registrar Nova Medição no Banco
         </button>
       </div>
 
@@ -154,7 +173,7 @@ window.AnthroManager = {
             ${getCal} <span class="metric-unit">kcal/dia</span>
           </div>
           <div class="metric-pill" style="background: #fef3c7; color: #b45309;">
-            Nível de Atividade: ${patient.activityLevel.toUpperCase()}
+            Nível: ${(patient.activity_level || patient.activityLevel || 'moderado').toUpperCase()}
           </div>
           <p class="metric-desc">Meta para perda: ~${getCal - 500} kcal | Ganho: ~${getCal + 350} kcal</p>
         </div>
@@ -166,7 +185,7 @@ window.AnthroManager = {
             <i class="fa-solid fa-person text-blue"></i>
           </div>
           <div class="metric-large-value">
-            ${latestMeasure.bodyFat}% <span class="metric-unit">gordura</span>
+            ${bodyFat}% <span class="metric-unit">gordura</span>
           </div>
           <div class="metric-pill" style="background: #e0f2fe; color: #0369a1;">
             Massa Magra: ${leanMassKg} kg (${fatMassKg} kg gordura)
@@ -178,8 +197,8 @@ window.AnthroManager = {
       <!-- Tabela de Histórico de Avaliações -->
       <div class="anthro-history-card">
         <div class="anthro-history-header">
-          <h3><i class="fa-solid fa-chart-line text-emerald"></i> Histórico Evolutivo de Medições</h3>
-          <span class="text-muted">Acompanhe a evolução de peso, circunferências e dobras</span>
+          <h3><i class="fa-solid fa-chart-line text-emerald"></i> Histórico Evolutivo Gravado no Supabase</h3>
+          <span class="text-muted">Acompanhe a evolução de peso, circunferências e dobras em tempo real</span>
         </div>
 
         <div class="table-responsive">
@@ -197,7 +216,7 @@ window.AnthroManager = {
               </tr>
             </thead>
             <tbody>
-              ${(patient.measurements || []).map((m, idx, arr) => {
+              ${(this.measurementsList || []).map((m, idx, arr) => {
                 const imc = this.calculateIMC(m.weight, patient.height).imc;
                 const prev = arr[idx - 1];
                 let diffText = "Inicial";
@@ -220,7 +239,7 @@ window.AnthroManager = {
                     <td><b>${m.date}</b></td>
                     <td><b>${m.weight} kg</b></td>
                     <td>${imc}</td>
-                    <td>${m.bodyFat ? m.bodyFat + '%' : '-'}</td>
+                    <td>${m.body_fat || m.bodyFat ? (m.body_fat || m.bodyFat) + '%' : '-'}</td>
                     <td>${m.waist || '-'} cm</td>
                     <td>${m.hip || '-'} cm</td>
                     <td>${m.arm || '-'} cm</td>
@@ -241,25 +260,31 @@ window.AnthroManager = {
     window.openModal("addMeasurementModal");
   },
 
-  saveNewMeasurement(data) {
-    const patient = window.APP_DATA.patients.find(p => p.id === this.currentPatientId);
-    if (!patient) return;
+  async saveNewMeasurement(data) {
+    if (!this.currentPatientId) return;
 
-    if (!patient.measurements) patient.measurements = [];
+    try {
+      const newMeasurement = {
+        patient_id: this.currentPatientId,
+        date: new Date().toISOString().split("T")[0],
+        weight: parseFloat(data.weight) || 70,
+        body_fat: parseFloat(data.bodyFat) || 0,
+        waist: parseFloat(data.waist) || 0,
+        hip: parseFloat(data.hip) || 0,
+        arm: parseFloat(data.arm) || 0,
+        notes: data.notes || "Avaliação clínica periódica"
+      };
 
-    const newObj = {
-      date: new Date().toLocaleDateString("pt-BR"),
-      weight: parseFloat(data.weight) || patient.weight,
-      bodyFat: parseFloat(data.bodyFat) || 0,
-      waist: parseFloat(data.waist) || 0,
-      hip: parseFloat(data.hip) || 0,
-      arm: parseFloat(data.arm) || 0
-    };
-
-    patient.weight = newObj.weight;
-    patient.measurements.push(newObj);
-    this.render();
-    window.showToast("Avaliação física registrada com sucesso!", "success");
-    window.closeModal("addMeasurementModal");
+      await window.DBService.createMeasurement(newMeasurement);
+      await this.loadPatientMeasurements(this.currentPatientId);
+      if (window.App && typeof window.App.loadPatientsFromDatabase === "function") {
+        window.App.loadPatientsFromDatabase();
+      }
+      window.showToast("Avaliação física gravada no Supabase!", "success");
+      window.closeModal("addMeasurementModal");
+    } catch (err) {
+      console.error("Erro ao salvar medição no banco:", err);
+      window.showToast("Erro ao gravar medição física.", "error");
+    }
   }
 };
