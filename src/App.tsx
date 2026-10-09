@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { Profile, Patient, DietPlan, Appointment, Recipe, UserRole } from './types/database';
 import { dbService, supabase } from './lib/supabase';
-import { Navbar } from './components/Navbar';
+import { Sidebar } from './components/Sidebar';
+import { Header } from './components/Header';
 import { AuthScreen } from './components/AuthScreen';
 import { Dashboard } from './components/Dashboard';
 import { DietBuilder } from './components/DietBuilder';
@@ -19,6 +20,8 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [currentUser, setCurrentUser] = useState<Profile | null>(null);
   const [currentView, setCurrentView] = useState('dashboard');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   const [patients, setPatients] = useState<Patient[]>([]);
   const [dietPlans, setDietPlans] = useState<DietPlan[]>([]);
@@ -181,93 +184,114 @@ export default function App() {
   }
 
   return (
-    <div className="nutricore-app" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Navbar
+    <div className={`nutricore-layout ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+      <Sidebar
         currentView={currentView}
         onSelectView={setCurrentView}
+        isCollapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+        isMobileOpen={mobileSidebarOpen}
+        onCloseMobile={() => setMobileSidebarOpen(false)}
         currentUser={currentUser}
         onLogout={handleLogout}
         realtimeConnected={realtimeConnected}
       />
 
-      <main className="db-main-content">
-        {currentView === 'dashboard' && (
-          <Dashboard
-            patients={patients}
-            dietPlans={dietPlans}
-            appointments={appointments}
-            profiles={profiles}
-            onOpenPatientDiet={handleOpenPatientDiet}
-            onOpenNewPatientModal={() => setIsNewPatientModalOpen(true)}
-            onOpenNewUserModal={() => setIsNewUserModalOpen(true)}
-            onOpenNewAppModal={() => setIsNewAppModalOpen(true)}
-          />
-        )}
+      <div className="nutricore-main-wrapper">
+        <Header
+          currentView={currentView}
+          onToggleSidebar={() => {
+            if (window.innerWidth < 1024) {
+              setMobileSidebarOpen(!mobileSidebarOpen);
+            } else {
+              setSidebarCollapsed(!sidebarCollapsed);
+            }
+          }}
+          realtimeConnected={realtimeConnected}
+          currentUser={currentUser}
+          onLogout={handleLogout}
+          onOpenNewPatientModal={() => setIsNewPatientModalOpen(true)}
+        />
 
-        {currentView === 'diet-builder' && (
-          <DietBuilder
-            patients={patients}
-            dietPlans={dietPlans}
-            selectedPatientId={selectedPatientId}
-            onSelectPatient={setSelectedPatientId}
-            onRefreshData={loadAllData}
-          />
-        )}
+        <main className="db-main-content">
+          {currentView === 'dashboard' && (
+            <Dashboard
+              patients={patients}
+              dietPlans={dietPlans}
+              appointments={appointments}
+              profiles={profiles}
+              onOpenPatientDiet={handleOpenPatientDiet}
+              onOpenNewPatientModal={() => setIsNewPatientModalOpen(true)}
+              onOpenNewUserModal={() => setIsNewUserModalOpen(true)}
+              onOpenNewAppModal={() => setIsNewAppModalOpen(true)}
+            />
+          )}
 
-        {currentView === 'patients' && (
-          <Patients
-            patients={patients}
-            onOpenNewPatientModal={() => setIsNewPatientModalOpen(true)}
-            onSelectPatientDiet={handleOpenPatientDiet}
-            onSelectPatientAnthro={handleOpenPatientAnthro}
-          />
-        )}
+          {currentView === 'diet-builder' && (
+            <DietBuilder
+              patients={patients}
+              dietPlans={dietPlans}
+              selectedPatientId={selectedPatientId}
+              onSelectPatient={setSelectedPatientId}
+              onRefreshData={loadAllData}
+            />
+          )}
 
-        {currentView === 'anthro' && (
-          <Anthropometry
-            patients={patients}
-            selectedPatientId={selectedPatientId}
-            onSelectPatient={setSelectedPatientId}
-            onRefreshData={loadAllData}
-          />
-        )}
+          {currentView === 'patients' && (
+            <Patients
+              patients={patients}
+              onOpenNewPatientModal={() => setIsNewPatientModalOpen(true)}
+              onSelectPatientDiet={handleOpenPatientDiet}
+              onSelectPatientAnthro={handleOpenPatientAnthro}
+            />
+          )}
 
-        {currentView === 'appointments' && (
-          <Appointments
-            appointments={appointments}
-            patients={patients}
-            onOpenNewAppModal={() => setIsNewAppModalOpen(true)}
-            onRefreshData={loadAllData}
-          />
-        )}
+          {currentView === 'anthro' && (
+            <Anthropometry
+              patients={patients}
+              selectedPatientId={selectedPatientId}
+              onSelectPatient={setSelectedPatientId}
+              onRefreshData={loadAllData}
+            />
+          )}
 
-        {currentView === 'users' && (
-          <UserRoles
-            profiles={profiles}
-            onOpenNewUserModal={() => setIsNewUserModalOpen(true)}
-            onRefreshData={loadAllData}
-          />
-        )}
+          {currentView === 'appointments' && (
+            <Appointments
+              appointments={appointments}
+              patients={patients}
+              onOpenNewAppModal={() => setIsNewAppModalOpen(true)}
+              onRefreshData={loadAllData}
+            />
+          )}
 
-        {currentView === 'recipes' && (
-          <RecipesShopping
-            recipes={recipes}
-            dietPlans={dietPlans}
-            patients={patients}
-            selectedPatientId={selectedPatientId}
-            onSelectPatient={setSelectedPatientId}
-          />
-        )}
+          {currentView === 'users' && (
+            <UserRoles
+              profiles={profiles}
+              onOpenNewUserModal={() => setIsNewUserModalOpen(true)}
+              onRefreshData={loadAllData}
+            />
+          )}
 
-        {currentView === 'patient-app' && (
-          <PatientSimulator
-            patients={patients}
-            dietPlans={dietPlans}
-            selectedPatientId={selectedPatientId}
-            onSelectPatient={setSelectedPatientId}
-          />
-        )}
-      </main>
+          {currentView === 'recipes' && (
+            <RecipesShopping
+              recipes={recipes}
+              dietPlans={dietPlans}
+              patients={patients}
+              selectedPatientId={selectedPatientId}
+              onSelectPatient={setSelectedPatientId}
+            />
+          )}
+
+          {currentView === 'patient-app' && (
+            <PatientSimulator
+              patients={patients}
+              dietPlans={dietPlans}
+              selectedPatientId={selectedPatientId}
+              onSelectPatient={setSelectedPatientId}
+            />
+          )}
+        </main>
+      </div>
 
       {/* Modais Globais Conectados ao Supabase */}
       <NewPatientModal
