@@ -107,8 +107,9 @@ export const PatientSimulator: React.FC<PatientSimulatorProps> = ({
       <div
         className="phone-bezel"
         style={{
-          width: '380px',
-          height: '760px',
+          width: 'min(380px, 94vw)',
+          maxWidth: '100%',
+          height: 'min(760px, 85vh)',
           background: '#0F172A',
           borderRadius: '44px',
           padding: '12px',

@@ -206,7 +206,7 @@ export const DietBuilder: React.FC<DietBuilderProps> = ({
           )}
         </div>
 
-        <div style={{ display: 'flex', gap: '8px', marginTop: '20px' }}>
+        <div className="diet-action-buttons">
           <button
             className="db-btn db-btn--outline"
             onClick={() => setActiveModal({ type: 'new-meal' })}

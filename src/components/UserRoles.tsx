@@ -100,8 +100,8 @@ export const UserRoles: React.FC<UserRolesProps> = ({
       </div>
 
       {/* Tabela de Usuários no Banco */}
-      <div style={{ background: 'var(--white)', borderRadius: '12px', border: '1px solid var(--cold-neutral-300)', boxShadow: 'var(--shadow-sm)', overflow: 'hidden' }}>
-        <table className="db-table" style={{ width: '100%' }}>
+      <div style={{ background: 'var(--white)', borderRadius: '12px', border: '1px solid var(--cold-neutral-300)', boxShadow: 'var(--shadow-sm)', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+        <table className="db-table" style={{ width: '100%', minWidth: '600px' }}>
           <thead>
             <tr>
               <th>Usuário</th>

@@ -169,7 +169,7 @@ export const Anthropometry: React.FC<AnthropometryProps> = ({
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 1.4fr', gap: '2rem' }}>
+      <div className="anthro-main-grid">
         {/* Formulário de Registro de Nova Avaliação */}
         <div style={{ background: 'var(--white)', padding: '24px', borderRadius: '12px', border: '1px solid var(--cold-neutral-300)', boxShadow: 'var(--shadow-sm)' }}>
           <h3 style={{ margin: '0 0 16px', fontSize: '1.1rem', fontWeight: 800, color: 'var(--cold-neutral-900)', display: 'flex', alignItems: 'center', gap: '8px' }}>
