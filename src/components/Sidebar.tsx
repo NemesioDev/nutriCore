@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Home, Utensils, Users, Scale, Calendar, Users2, BookOpen, Smartphone,
-  LogOut, ChevronLeft, ChevronRight, X
+  LogOut, X
 } from 'lucide-react';
 import type { Profile } from '../types/database';
 
@@ -9,24 +9,20 @@ interface SidebarProps {
   currentView: string;
   onSelectView: (view: string) => void;
   isCollapsed: boolean;
-  onToggleCollapse: () => void;
   isMobileOpen: boolean;
   onCloseMobile: () => void;
   currentUser: Profile | null;
   onLogout: () => void;
-  realtimeConnected: boolean;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   currentView,
   onSelectView,
   isCollapsed,
-  onToggleCollapse,
   isMobileOpen,
   onCloseMobile,
   currentUser,
   onLogout,
-  realtimeConnected
 }) => {
   const navItems = [
     { id: 'dashboard', label: 'Dashboard', icon: Home },
@@ -44,6 +40,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
     onCloseMobile();
   };
 
+  const getInitials = (name?: string) => {
+    if (!name) return 'NC';
+    const parts = name.trim().split(' ');
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  };
+
   return (
     <>
       {/* Backdrop para mobile quando a barra lateral estiver aberta */}
@@ -52,7 +55,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       )}
 
       <aside className={`nutricore-sidebar ${isCollapsed ? 'collapsed' : ''} ${isMobileOpen ? 'mobile-open' : ''}`}>
-        {/* Topo da Sidebar: Brand e Botão de Recolher */}
+        {/* Topo da Sidebar: Brand e Botão fechar apenas no mobile */}
         <div className="sidebar-header">
           <div className="sidebar-brand" onClick={() => handleItemClick('dashboard')}>
             <svg width="32" height="32" viewBox="0 0 200 200" style={{ flexShrink: 0 }}>
@@ -64,22 +67,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
             )}
           </div>
 
-          {/* Botão recolher no desktop */}
-          <button
-            className="sidebar-collapse-btn desktop-only"
-            onClick={onToggleCollapse}
-            title={isCollapsed ? "Expandir Menu" : "Recolher Menu"}
-          >
-            {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
-          </button>
-
           {/* Botão fechar no mobile */}
           <button
             className="sidebar-close-mobile-btn mobile-only"
             onClick={onCloseMobile}
             title="Fechar Menu"
           >
-            <X size={18} />
+            <X size={20} />
           </button>
         </div>
 
@@ -108,25 +102,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </ul>
         </nav>
 
-        {/* Rodapé da Sidebar: Usuário Conectado e Logout */}
+        {/* Rodapé da Sidebar: Usuário Conectado e Logout (Sem badge de realtime conforme solicitado) */}
         <div className="sidebar-footer">
-          {/* Status Realtime */}
-          <div className={`sidebar-realtime-badge ${realtimeConnected ? 'online' : 'connecting'}`} title={realtimeConnected ? 'Supabase Realtime Ativo' : 'Conectando ao Banco...'}>
-            <span className={`pulse-dot ${realtimeConnected ? 'online' : 'connecting'}`}></span>
-            {!isCollapsed && (
-              <span className="realtime-badge-label">
-                {realtimeConnected ? 'Supabase Realtime' : 'Conectando...'}
-              </span>
-            )}
-          </div>
-
-          {/* Card do Usuário */}
           <div className="sidebar-user-card" title={currentUser?.name || "Usuário"}>
-            <img
-              src={currentUser?.avatar_url || "https://images.unsplash.com/photo-1594824813589-3221b659c256?auto=format&fit=crop&w=200&q=80"}
-              alt={currentUser?.name || "Usuário"}
-              className="sidebar-user-avatar"
-            />
+            <div className="avatar-initials-circle">
+              {getInitials(currentUser?.name)}
+            </div>
             {!isCollapsed && (
               <div className="sidebar-user-info">
                 <span className="sidebar-user-name">{currentUser?.name || "Dra. Camila"}</span>

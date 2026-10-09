@@ -293,6 +293,28 @@ body {
   flex-shrink: 0;
 }
 
+.avatar-initials-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00D285 0%, #059669 100%);
+  color: var(--white);
+  font-weight: 800;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: -0.5px;
+  box-shadow: 0 2px 4px rgba(0, 210, 133, 0.2);
+}
+
+.avatar-initials-circle.sm {
+  width: 32px;
+  height: 32px;
+  font-size: 0.775rem;
+}
+
 .sidebar-user-info {
   display: flex;
   flex-direction: column;

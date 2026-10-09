@@ -189,12 +189,10 @@ export default function App() {
         currentView={currentView}
         onSelectView={setCurrentView}
         isCollapsed={sidebarCollapsed}
-        onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
         isMobileOpen={mobileSidebarOpen}
         onCloseMobile={() => setMobileSidebarOpen(false)}
         currentUser={currentUser}
         onLogout={handleLogout}
-        realtimeConnected={realtimeConnected}
       />
 
       <div className="nutricore-main-wrapper">
@@ -207,7 +205,6 @@ export default function App() {
               setSidebarCollapsed(!sidebarCollapsed);
             }
           }}
-          realtimeConnected={realtimeConnected}
           currentUser={currentUser}
           onLogout={handleLogout}
           onOpenNewPatientModal={() => setIsNewPatientModalOpen(true)}
