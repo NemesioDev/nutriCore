@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Mail, Lock, ArrowRight, Zap, CheckCircle2, ShieldCheck, Database, Smartphone } from 'lucide-react';
+import { Mail, Lock, ArrowRight, Zap, CheckCircle2, ShieldCheck, Smartphone, AlertCircle } from 'lucide-react';
 
 interface AuthScreenProps {
-  onLogin: (email: string, role: string) => void;
+  onLogin: (email: string, password: string, role: string) => Promise<boolean> | boolean;
   onOpenNewUserModal: () => void;
 }
 
@@ -10,10 +10,23 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin, onOpenNewUserMo
   const [role, setRole] = useState<'nutricionista' | 'paciente'>('nutricionista');
   const [email, setEmail] = useState('camila.nutri@nutricore.com.br');
   const [password, setPassword] = useState('NutriCore@2026');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onLogin(email, role);
+    setErrorMsg('');
+    setSubmitting(true);
+    try {
+      const success = await onLogin(email, password, role);
+      if (!success) {
+        setErrorMsg('E-mail ou senha incorretos. Verifique suas credenciais.');
+      }
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Erro ao realizar login.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -38,13 +51,13 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin, onOpenNewUserMo
 
         <div className="auth-banner-content">
           <div className="auth-banner-badge">
-            <Database size={15} /> Supabase PostgreSQL Realtime
+            <ShieldCheck size={15} /> Plataforma Clínica Certificada
           </div>
           <h2 className="auth-banner-title">
-            Prescrição precisa de dietas e <b>gestão escalável</b> com React & TypeScript.
+            Prescrição precisa de dietas e <b>gestão completa</b> para nutricionistas.
           </h2>
           <p className="auth-banner-description">
-            Plataforma moderna com banco de dados relacional, Tabela TACO oficial, cálculos metabólicos automáticos e aplicativo do paciente em tempo real.
+            Plataforma moderna com banco relacional de alta segurança, Tabela TACO oficial, cálculos metabólicos automáticos e aplicativo do paciente integrado.
           </p>
 
           <div className="auth-features-pills">
@@ -58,11 +71,11 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin, onOpenNewUserMo
             </div>
             <div className="auth-feature-item">
               <Smartphone size={16} className="text-emerald" />
-              <span>App do Paciente ao Vivo</span>
+              <span>App do Paciente Integrado</span>
             </div>
             <div className="auth-feature-item">
               <Zap size={16} className="text-emerald" />
-              <span>Sincronização em Tempo Real</span>
+              <span>Sincronização Instantânea</span>
             </div>
           </div>
         </div>
@@ -82,6 +95,8 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin, onOpenNewUserMo
               onClick={() => {
                 setRole('nutricionista');
                 setEmail('camila.nutri@nutricore.com.br');
+                setPassword('NutriCore@2026');
+                setErrorMsg('');
               }}
             >
               Nutricionista
@@ -92,6 +107,8 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin, onOpenNewUserMo
               onClick={() => {
                 setRole('paciente');
                 setEmail('rodrigo.silveira@email.com');
+                setPassword('NutriCore@2026');
+                setErrorMsg('');
               }}
             >
               Paciente
@@ -106,6 +123,13 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin, onOpenNewUserMo
                 : 'Acesso do paciente ao plano alimentar e metas.'}
             </p>
           </div>
+
+          {errorMsg && (
+            <div style={{ background: '#fef2f2', border: '1px solid #fecaca', color: '#b91c1c', padding: '10px 14px', borderRadius: '8px', fontSize: '0.85rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <AlertCircle size={16} style={{ flexShrink: 0 }} />
+              <span>{errorMsg}</span>
+            </div>
+          )}
 
           <form onSubmit={handleSubmit}>
             <div className="auth-field">
@@ -148,8 +172,8 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin, onOpenNewUserMo
               </a>
             </div>
 
-            <button type="submit" className="auth-submit-btn">
-              <span>Entrar no NutriCore</span>
+            <button type="submit" className="auth-submit-btn" disabled={submitting}>
+              <span>{submitting ? 'Verificando...' : 'Entrar no NutriCore'}</span>
               <ArrowRight size={16} />
             </button>
           </form>
@@ -159,7 +183,11 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onLogin, onOpenNewUserMo
             <button
               type="button"
               className="auth-demo-btn"
-              onClick={() => onLogin('camila.nutri@nutricore.com.br', 'nutricionista')}
+              onClick={() => {
+                setEmail('camila.nutri@nutricore.com.br');
+                setPassword('NutriCore@2026');
+                onLogin('camila.nutri@nutricore.com.br', 'NutriCore@2026', 'nutricionista');
+              }}
             >
               Entrar como Dra. Camila (CRN-3 48.291)
             </button>

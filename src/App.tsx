@@ -112,23 +112,19 @@ export default function App() {
     };
   }, [loadAllData]);
 
-  // Login handler
-  const handleLogin = (email: string, role: string) => {
+  // Login handler com validação de senha
+  const handleLogin = (email: string, password: string, _role: string): boolean => {
     const matched = profiles.find(p => p.email.toLowerCase() === email.toLowerCase());
     if (matched) {
+      if (matched.password && matched.password !== password) {
+        return false;
+      }
       setCurrentUser(matched);
-    } else {
-      // Mock / fallback profile caso o email ainda não esteja registrado
-      setCurrentUser({
-        id: 'user-temp',
-        name: email.split('@')[0],
-        email,
-        role: role as UserRole,
-        created_at: new Date().toISOString()
-      });
+      setIsLoggedIn(true);
+      setCurrentView('dashboard');
+      return true;
     }
-    setIsLoggedIn(true);
-    setCurrentView('dashboard');
+    return false;
   };
 
   const handleLogout = () => {

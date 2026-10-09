@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, ShieldPlus, Sparkles } from 'lucide-react';
+import { X, ShieldPlus, Sparkles, Lock } from 'lucide-react';
 import type { Profile, UserRole } from '../../types/database';
 
 interface NewUserModalProps {
@@ -11,30 +11,43 @@ interface NewUserModalProps {
 export const NewUserModal: React.FC<NewUserModalProps> = ({ isOpen, onClose, onSave }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState<UserRole>('nutricionista');
   const [title, setTitle] = useState('Nutricionista Clínico');
-  const [crn, setCrn] = useState('CRN-3 48.291');
+  const [crn, setCrn] = useState('');
   const [clinic, setClinic] = useState('NutriCore Saúde Integrada');
-  const [phone, setPhone] = useState('(11) 98765-4321');
+  const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim()) return alert('Preencha os campos obrigatórios');
+    if (!name.trim() || !email.trim()) return alert('Preencha os campos obrigatórios (Nome e E-mail)');
+    if (!password) return alert('Por favor, informe uma senha de acesso.');
+    if (password.length < 6) return alert('A senha deve conter no mínimo 6 caracteres.');
+    if (password !== confirmPassword) return alert('As senhas digitadas não coincidem.');
+
     setLoading(true);
     try {
       await onSave({
         name,
         email,
+        password,
         role,
         title,
-        crn: role === 'nutricionista' ? crn : undefined,
+        crn: role === 'nutricionista' || role === 'admin' ? crn : undefined,
         clinic,
         phone,
-        avatar_url: `https://images.unsplash.com/photo-1594824813589-3221b659c256?auto=format&fit=crop&w=200&q=80`
+        avatar_url: `https://images.unsplash.com/photo-${role === 'paciente' ? '1534528741775-53994a69daeb' : '1594824813589-3221b659c256'}?auto=format&fit=crop&w=200&q=80`
       });
+      alert(`Usuário "${name}" cadastrado com sucesso! Já pode realizar login com o e-mail e a senha criados.`);
+      setName('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+      setCrn('');
       onClose();
     } catch (err: any) {
       alert('Erro ao cadastrar perfil: ' + (err.message || err));
@@ -69,7 +82,7 @@ export const NewUserModal: React.FC<NewUserModalProps> = ({ isOpen, onClose, onS
 
           <div className="form-grid-2">
             <div className="form-group">
-              <label className="form-label">E-mail Corporativo *</label>
+              <label className="form-label">E-mail de Acesso (Login) *</label>
               <input
                 type="email"
                 className="db-input-field"
@@ -90,14 +103,44 @@ export const NewUserModal: React.FC<NewUserModalProps> = ({ isOpen, onClose, onS
                   if (r === 'admin') setTitle('Diretor Clínico / Gestor');
                   else if (r === 'nutricionista') setTitle('Nutricionista Clínico');
                   else if (r === 'recepcionista') setTitle('Secretaria & Atendimento');
-                  else setTitle('Paciente Convidado');
+                  else setTitle('Paciente');
                 }}
               >
-                <option value="admin">Administrador (Acesso Total)</option>
                 <option value="nutricionista">Nutricionista (Prescrições & Prontuários)</option>
+                <option value="admin">Administrador (Acesso Total à Clínica)</option>
                 <option value="recepcionista">Recepcionista (Agendamentos & Check-in)</option>
                 <option value="paciente">Paciente (Visualizador de Dieta & App)</option>
               </select>
+            </div>
+          </div>
+
+          {/* Campos de Senha Obrigatórios */}
+          <div className="form-grid-2">
+            <div className="form-group">
+              <label className="form-label">Senha de Acesso (mín. 6 dígitos) *</label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type="password"
+                  className="db-input-field"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••••••"
+                  required
+                />
+              </div>
+            </div>
+            <div className="form-group">
+              <label className="form-label">Confirmar Senha *</label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type="password"
+                  className="db-input-field"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••••••••"
+                  required
+                />
+              </div>
             </div>
           </div>
 
@@ -153,7 +196,7 @@ export const NewUserModal: React.FC<NewUserModalProps> = ({ isOpen, onClose, onS
               Cancelar
             </button>
             <button type="submit" className="db-btn db-btn--primary" disabled={loading}>
-              <Sparkles size={16} /> {loading ? 'Criando no Banco...' : 'Criar Perfil no Supabase'}
+              <Sparkles size={16} /> {loading ? 'Cadastrando...' : 'Cadastrar'}
             </button>
           </div>
         </form>

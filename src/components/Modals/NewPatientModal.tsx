@@ -170,7 +170,7 @@ export const NewPatientModal: React.FC<NewPatientModalProps> = ({ isOpen, onClos
               Cancelar
             </button>
             <button type="submit" className="db-btn db-btn--primary" disabled={loading}>
-              <Sparkles size={16} /> {loading ? 'Salvando no Supabase...' : 'Salvar no Banco de Dados'}
+              <Sparkles size={16} /> {loading ? 'Cadastrando...' : 'Cadastrar'}
             </button>
           </div>
         </form>

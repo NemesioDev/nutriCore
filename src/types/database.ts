@@ -12,6 +12,7 @@ export interface Profile {
   clinic?: string;
   phone?: string;
   avatar_url?: string;
+  password?: string;
   created_at: string;
   updated_at?: string;
 }

@@ -272,7 +272,7 @@ export const Anthropometry: React.FC<AnthropometryProps> = ({
             </div>
 
             <button type="submit" className="db-btn db-btn--primary" style={{ width: '100%', marginTop: '12px' }} disabled={saving}>
-              <Sparkles size={16} /> {saving ? 'Salvando...' : 'Salvar Medição no Supabase'}
+              <Sparkles size={16} /> {saving ? 'Salvando...' : 'Salvar Avaliação'}
             </button>
           </form>
         </div>
